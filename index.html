@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SF Caterers</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+    <style>
+        body {
+            background: linear-gradient(to right, #f4d03f, #16a085);
+            color: #fff;
+            scroll-behavior: smooth;
+        }
+        header, footer {
+            background: #145a32;
+        }
+        .btn-primary {
+            background-color: #f4d03f;
+            border-color: #f4d03f;
+            color: #145a32;
+        }
+        .btn-primary:hover {
+            background-color: #d4ac0d;
+        }
+        .nav-link {
+            transition: all 0.3s ease-in-out;
+        }
+        .nav-link:hover {
+            color: #f4d03f !important;
+            transform: scale(1.1);
+        }
+        section {
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 0.6s ease-out;
+        }
+        section.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body>
+    <header class="text-white text-center py-3">
+        <h1>SF Caterers</h1>
+        <nav>
+            <ul class="nav justify-content-center">
+                <li class="nav-item"><a class="nav-link text-white" href="#home">Home</a></li>
+                <li class="nav-item"><a class="nav-link text-white" href="#services">Services</a></li>
+                <li class="nav-item"><a class="nav-link text-white" href="#menu">Menu</a></li>
+                <li class="nav-item"><a class="nav-link text-white" href="#gallery">Gallery</a></li>
+                <li class="nav-item"><a class="nav-link text-white" href="#contact">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+    
+    <section id="home" class="container text-center my-5">
+        <h2>Welcome to SF Caterers</h2>
+        <p class="lead">Providing premium catering services for all events.</p>
+        <img src="https://alrayyancaterers.com/wp-content/uploads/2021/01/Capture.png" class="img-fluid" alt="Catering Event">
+    </section>
+    
+    <section id="services" class="container text-center my-5">
+        <h2>Our Services</h2>
+        <p>We offer wedding catering, corporate events, and private parties.</p>
+    </section>
+    
+    <section id="menu" class="container my-5">
+        <h2 class="text-center">Our Menu</h2>
+        <div class="row align-items-center">
+            <div class="col-md-6">
+                <button class="btn btn-primary w-100 my-2">Menu 1 - 1000Pax - Shadi/Valima</button>
+                <p>Welcome Drinks: Rooh Afza, Fresh Lime
+                <br>Starters: Haleem,plater-- fish, kfc chicken, veg roll, malai chicken 
+                <br>Main Course: Red chicken, Rumali roti ,Mutton Biryani,
+                <br>Desserts: Qubani Ka Meetha, kaddu ki kheer</p>
+                
+                <button class="btn btn-primary w-100 my-2">Menu 2 - 1400Pax - Shadi/Valima</button>
+                <p>Welcome Drinks: Rooh Afza, Fresh Lime, Fruit Punch
+                <br>Starters: Marag, Naam ki Roti, staters-fish, kfc chicken, veg roll, loose prawns
+                <br>Main Course: Red Aachari Chicken, Green Chicken, Butter Naan, Kaju Rice,
+                <br>Desserts: Qubani Ka Meetha, Fruit salad</p>
+                
+                <button class="btn btn-primary w-100 my-2">Menu 3 - 1700Pax - Shadi/Valima</button>
+                <p>Welcome Drinks: Rooh Afza, Fresh Lime, Mango Shake
+                <br>Starters: Haleem, Marag, Mutton Chops, Kebab
+                <br>Main Course: Red Aachari Chicken, Green Chicken, Butter Naan, Kaju Rice, Mutton Biryani
+                <br>Desserts: Qubani Ka Meetha, kaddu ka halwa, Rabdi</p>
+            </div>
+            <div class="col-md-6">
+                <img src="https://images.unsplash.com/photo-1505253758473-96b7015fcd40" class="img-fluid" alt="Menu Image">
+            </div>
+        </div>
+    </section>
+    
+    <section id="gallery" class="container text-center my-5">
+        <h2>Gallery</h2>
+        <p>Check out our amazing food and events.</p>
+        <div class="row">
+            <div class="col-md-4"><img src="https://www.cookwithkushi.com/wp-content/uploads/2023/10/best_simple_hyderabadi_chicken_biryani.jpg" class="img-fluid" alt="Dish 1"></div>
+            <div class="col-md-4"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSjjonY3i765Aa7z_0qpjYcvUll6wIfTkU0wBDJqkBjaT1LcbSlEzJ0UAcp4T6q7YGNUec&usqp=CAU" class="img-fluid" alt="Dish 2"></div>
+            <div class="col-md-4"><img src="https://upload.wikimedia.org/wikipedia/commons/f/f3/Rumali_roti.jpg" class="img-fluid" alt="Dish 3"></div>
+        </div>
+    </section>
+    
+    <section id="contact" class="container text-center my-5">
+        <h2>Contact Us</h2>
+        <p>Email: farhanshaik5066@gmail.com | Phone: 9885655941 | 7794905941</p>
+        <form>
+            <div class="mb-3">
+                <input type="text" class="form-control" placeholder="Your Name" required>
+            </div>
+            <div class="mb-3">
+                <input type="email" class="form-control" placeholder="Your Email" required>
+            </div>
+            <div class="mb-3">
+                <textarea class="form-control" placeholder="Your Message" rows="4" required></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">Send Message</button>
+        </form>
+    </section>
+    
+    <footer class="text-white text-center py-3">
+        <p>&copy; 2025 SF Caterers. All rights reserved.</p>
+    </footer>
+
+    <!-- WhatsApp Floating Button -->
+    <a href="https://wa.me/9885655941?text=Hello%20SF%20Caterers,%20I%20would%20like%20to%20inquire%20about%20your%20services." 
+       class="whatsapp-button" 
+       target="_blank">
+       <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp" width="50">
+    </a>
+
+    <script>
+        document.addEventListener("scroll", function() {
+            let sections = document.querySelectorAll("section");
+            sections.forEach(section => {
+                let rect = section.getBoundingClientRect();
+                if (rect.top < window.innerHeight * 0.75) {
+                    section.classList.add("visible");
+                }
+            });
+        });
+    </script>
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
