@@ -1,677 +1,225 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Fab Sticks — Stick Your Vibe</title>
-
-  <!-- =========================
-       Styles (embedded)
-       ========================= -->
+  <title>Ruby Florals — Prototype</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
   <style>
-    :root{
-      --bg: #000000;
-      --card: #0f0f0f;
-      --muted: #bfbfbf;
-      --accent: #C8FF57; /* neon green */
-      --accent-dark: #9be044;
-      --border: #2B2B2B;
-      --glass: rgba(255,255,255,0.03);
-      --glass-2: rgba(200,255,87,0.04);
-      --max-width: 1200px;
-      --radius: 12px;
-    }
-
-    /* Reset & base */
-    *{box-sizing:border-box}
-    html,body{height:100%}
-    body{
-      margin:0;
-      font-family: Inter, "Poppins", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
-      background:var(--bg);
-      color:#fff;
-      -webkit-font-smoothing:antialiased;
-      -moz-osx-font-smoothing:grayscale;
-      line-height:1.45;
-    }
-
-    a{color:var(--accent); text-decoration:none}
-    img{max-width:100%; display:block}
-
-    .container{max-width:var(--max-width); margin:0 auto; padding:0 20px;}
-
-    /* Header */
-    header{
-      position:sticky; top:0; z-index:60;
-      backdrop-filter: blur(6px);
-      background: linear-gradient(180deg, rgba(0,0,0,0.7), rgba(0,0,0,0.45));
-      border-bottom:1px solid var(--border);
-    }
-    .nav{
-      display:flex; align-items:center; justify-content:space-between;
-      gap:20px; padding:12px 0;
-    }
-    .brand{
-      display:flex; align-items:center; gap:12px;
-    }
-    .brand img{height:58px; width:auto; border-radius:8px}
-    .brand h1{font-size:1.1rem; letter-spacing:0.6px; color:var(--accent); margin:0}
-    nav.links{display:flex; gap:18px; align-items:center}
-    nav.links a{color:#ddd; font-weight:600}
-    .cta-shop{background:var(--accent); color:#000; padding:8px 14px; border-radius:999px; font-weight:700; box-shadow:0 6px 22px rgba(200,255,87,0.08)}
-    .cta-shop:hover{background:var(--accent-dark); transform:translateY(-2px)}
-
-    /* Hero */
-    .hero{
-      padding:72px 0 40px;
-      text-align:center;
-      background: radial-gradient(600px 300px at 10% 10%, rgba(200,255,87,0.04), transparent 8%),
-                  radial-gradient(500px 260px at 95% 90%, rgba(200,255,87,0.02), transparent 8%);
-    }
-    .hero h2{font-size:2.6rem; color:var(--accent); margin:6px 0}
-    .hero p{color:var(--muted); font-size:1.05rem; margin:12px 0 18px}
-    .hero .hero-actions{display:flex; gap:12px; justify-content:center; flex-wrap:wrap; margin-top:8px}
-    .btn{
-      display:inline-flex; align-items:center; gap:10px;
-      padding:10px 18px; border-radius:999px; cursor:pointer; border:none; font-weight:700;
-      background:transparent; color:var(--accent); outline:1px solid rgba(200,255,87,0.15);
-    }
-    .btn.primary{background:linear-gradient(90deg,var(--accent),var(--accent-dark)); color:#000}
-
-    /* About */
-    .about{display:flex; gap:28px; align-items:center; padding:32px 0}
-    .about .copy{flex:1}
-    .about .cards{display:flex; gap:14px; flex:1; justify-content:center; flex-wrap:wrap}
-    .small-card{background:var(--card); padding:14px; border-radius:10px; width:170px; border:1px solid var(--border)}
-    .small-card h4{margin:6px 0 0; font-size:0.95rem; color:var(--accent)}
-
-    /* Shop */
-    .shop{padding:34px 0 60px}
-    .shop h3{color:var(--accent); margin-bottom:18px; text-align:center}
-    .grid{
-      display:grid;
-      grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-      gap:20px;
-      align-items:start;
-    }
-    .card{
-      background:linear-gradient(180deg,var(--glass),transparent);
-      border:1px solid var(--border);
-      padding:14px; border-radius:var(--radius);
-      transition:transform .22s ease, box-shadow .22s ease;
-      display:flex; flex-direction:column; gap:10px;
-    }
-    .card:hover{transform:translateY(-8px); box-shadow:0 16px 40px rgba(0,0,0,0.6), 0 0 30px rgba(200,255,87,0.06)}
-
-    .card .imgwrap{height:170px; display:flex; align-items:center; justify-content:center; background:linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.00)); border-radius:8px; overflow:hidden}
-    .card h4{margin:0; font-size:1.05rem}
-    .meta{display:flex; justify-content:space-between; color:var(--muted); font-weight:600}
-    .card .actions{display:flex; gap:10px; margin-top:auto; align-items:center}
-
-    .btn.ghost{border:1px solid rgba(255,255,255,0.06); color:#eee; padding:8px 12px; border-radius:8px}
-    .price{font-weight:900; color:var(--accent)}
-
-    /* Floating cart button / mini cart */
-    .cart-fab{
-      position:fixed; right:22px; bottom:22px; z-index:80;
-      background:linear-gradient(90deg,var(--accent),var(--accent-dark)); color:#000;
-      width:64px; height:64px; border-radius:999px; display:flex; align-items:center; justify-content:center;
-      box-shadow:0 12px 40px rgba(0,0,0,0.6), 0 6px 20px rgba(200,255,87,0.12);
-      cursor:pointer;
-    }
-    .cart-count{position:absolute; right:calc(22px - 6px); top:calc(22px - 6px); background:#111; color:var(--accent); width:22px; height:22px; font-size:12px; display:flex; align-items:center; justify-content:center; border-radius:6px; border:1px solid var(--border)}
-
-    .mini-cart{
-      position:fixed; right:22px; bottom:96px; width:320px; max-height:420px; overflow:auto;
-      background:#0b0b0b; border-radius:12px; border:1px solid var(--border); padding:12px; z-index:85;
-      box-shadow:0 24px 60px rgba(0,0,0,0.6);
-      transform-origin:bottom right; display:none;
-    }
-    .mini-cart h4{margin:4px 0 8px; color:var(--accent)}
-    .mini-item{display:flex; gap:10px; align-items:center; padding:8px 6px; border-bottom:1px dashed rgba(255,255,255,0.03)}
-    .mini-item img{width:58px; height:58px; object-fit:cover; border-radius:8px}
-    .mini-item .r{flex:1}
-    .mini-item .r p{margin:0; color:var(--muted); font-size:0.95rem}
-    .mini-total{display:flex; justify-content:space-between; align-items:center; margin-top:10px; font-weight:800; color:var(--accent)}
-
-    /* Modal (customize) */
-    .modal-backdrop{
-      position:fixed; inset:0; background:rgba(0,0,0,0.7); display:none; z-index:90;
-      align-items:center; justify-content:center; padding:18px;
-    }
-    .modal{
-      background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
-      border-radius:14px; padding:18px; width:100%; max-width:520px; border:1px solid var(--border); box-shadow:0 40px 90px rgba(0,0,0,0.7)
-    }
-    .modal header{display:flex; justify-content:space-between; align-items:center; gap:10px}
-    .modal header h4{color:var(--accent); margin:0}
-    .field{margin:10px 0; display:flex; flex-direction:column; gap:6px}
-    .field label{font-size:0.9rem; color:var(--muted)}
-    select,input[type="number"], input[type="file"], textarea{
-      background:#0a0a0a; color:#fff; padding:10px; border-radius:8px; border:1px solid var(--border); outline:none;
-    }
-    .size-options{display:flex; gap:8px; margin-top:6px}
-    .size-btn{padding:9px 12px; border-radius:8px; cursor:pointer; border:1px solid rgba(255,255,255,0.04)}
-    .size-btn.active{background:linear-gradient(90deg,var(--accent),var(--accent-dark)); color:#000; border:1px solid rgba(0,0,0,0.2)}
-
-    .upload-preview{margin-top:8px; max-height:160px; border-radius:8px; object-fit:contain; display:none; border:1px solid rgba(255,255,255,0.03)}
-
-    .modal .price-line{margin-top:12px; display:flex; justify-content:space-between; align-items:center; font-weight:800; color:var(--accent); font-size:1.2rem}
-
-    /* Contact + footer */
-    .contact{padding:40px 0 80px; text-align:center}
-    .socials{display:flex; gap:18px; justify-content:center; align-items:center; margin-top:12px}
-    .socials a{padding:10px 12px; border-radius:8px; border:1px solid rgba(255,255,255,0.03); color:#ddd}
-
-    footer{padding:18px; border-top:1px solid var(--border); text-align:center; color:#9a9a9a}
-
-    /* small devices */
-    @media (max-width:720px){
-      .about{flex-direction:column; text-align:center}
-      .brand img{height:46px}
-      .hero h2{font-size:2rem}
-      .mini-cart{right:12px; left:auto; width:92%; bottom:92px}
-    }
+    /* small extra styles for the prototype */
+    .card { border-radius: 12px; box-shadow: 0 6px 18px rgba(15,23,42,0.06); }
+    .rounded-image { border-top-left-radius: 12px; border-top-right-radius: 12px; }
+    .product-grid { grid-template-columns: repeat(1, minmax(0,1fr)); }
+    @media(min-width:640px){ .product-grid{ grid-template-columns: repeat(2, minmax(0,1fr)); } }
+    @media(min-width:1024px){ .product-grid{ grid-template-columns: repeat(4, minmax(0,1fr)); } }
   </style>
 </head>
-<body>
-
+<body class="bg-gray-50 text-gray-900 font-sans">
   <!-- Header -->
-  <header>
-    <div class="container nav" role="banner">
-      <div class="brand" aria-hidden="false">
-        <!-- Uses your uploaded logo file: logo2.jpg (place in same folder) -->
-        <img src="logo2.jpg" alt="Fab Sticks logo">
-        <div>
-          <h1>Fab Sticks</h1>
-          <div style="font-size:12px; color:#cfcfcf">Stick your vibe</div>
-        </div>
+  <header class="bg-white shadow-sm sticky top-0 z-30">
+    <div class="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
+      <div class="flex items-center space-x-3">
+        <div class="w-10 h-10 bg-pink-600 rounded flex items-center justify-center text-white font-bold">RF</div>
+        <div class="text-lg font-semibold">RUBY FLORALS</div>
       </div>
-
-      <nav class="links" aria-label="Main navigation">
-        <a href="#home">Home</a>
-        <a href="#shop">Shop</a>
-        <a href="#custom">Custom</a>
-        <a href="#contact">Contact</a>
-        <button class="cta-shop" onclick="document.getElementById('shop').scrollIntoView({behavior:'smooth'})">Shop Now</button>
+      <nav class="hidden md:flex items-center space-x-6 text-sm">
+        <a href="#home" class="hover:text-pink-600">Home</a>
+        <a href="#bouquets" class="hover:text-pink-600">Bouquets</a>
+        <a href="#contact" class="hover:text-pink-600">Contact</a>
       </nav>
+      <button id="whatsappTop" class="hidden md:inline-flex items-center bg-pink-600 text-white px-4 py-2 rounded">Order via WhatsApp</button>
+      <button id="menuBtn" class="md:hidden">☰</button>
     </div>
   </header>
 
-  <!-- HERO -->
-  <main id="home">
-    <section class="hero">
-      <div class="container">
-        <h2>Express it. Stick it. Fab Sticks.</h2>
-        <p>Custom and aesthetic stickers for laptops, phones, bikes and more — made for Gen Z vibes.</p>
-        <div class="hero-actions">
-          <button class="btn primary" onclick="document.getElementById('shop').scrollIntoView({behavior:'smooth'})">Shop Collection</button>
-          <button class="btn" onclick="openModalFromCTA()">Customize Your Sticker</button>
+  <!-- Hero -->
+  <main id="home" class="max-w-6xl mx-auto px-4 pt-6">
+    <section class="card overflow-hidden">
+      <div class="relative">
+        <!-- Using the uploaded image path as requested -->
+        <img src="/Hero1.jpg" alt="Ruby Florals hero" class="w-full h-64 object-cover sm:h-96" />
+        <div class="absolute inset-0 bg-black bg-opacity-40 flex flex-col items-center justify-center text-center p-6">
+          <h1 class="text-3xl sm:text-5xl font-extrabold text-white tracking-wide">RUBY FLORALS</h1>
+          <p class="text-white mt-3 text-sm sm:text-lg">Fresh Flowers & Beautiful Designs</p>
+          <a href="#bouquets" class="mt-6 inline-block bg-pink-600 text-white px-6 py-3 rounded-xl font-semibold">Shop Now</a>
+        </div>
+      </div>
+      <div class="bg-white p-6">
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
+          <a href="#bouquets" class="card p-3 flex flex-col items-center text-center hover:shadow-md">
+            <img src="https://encrypted-tbn1.gstatic.com/licensed-image?q=tbn:ANd9GcTmd-rElYy2VUpVTVUQ4m07MO23MSIQsINn34UcM-LEnxJL2PCV96WHmlJDPoyACAp1zUBC4P8u_pz1npEO7IFeR-bJJmTOAUfDlCuXcVveh7UOZAs" alt="bouquets" class="w-full h-36 object-cover rounded-image mb-3" />
+            <div class="text-lg font-semibold">Bouquets</div>
+          </a>
+          <div class="card p-3 flex flex-col items-center text-center">
+            <img src="https://encrypted-tbn3.gstatic.com/licensed-image?q=tbn:ANd9GcQwl5tU5jOguKk79EJKs85pIe4hqJ97Qb0qUJvbGfIs958-if9upM2t34mSqxifV5AVcWla33u7EabbVcXmWjDaQCVSe2pgPiKnXgjOm5xQc_b2S_M" alt="bridal" class="w-full h-36 object-cover rounded-image mb-3" />
+            <div class="text-lg font-semibold">Bridal Mandap</div>
+          </div>
+          <a href="#events" class="card p-3 flex flex-col items-center text-center">
+            <img src="https://encrypted-tbn2.gstatic.com/licensed-image?q=tbn:ANd9GcR_U_A_bYIV-O9YGv-m3JpF6l09vjUJYXHhytCBX7HIz1ezgpIqGxzXKatqQeOv28v36ngTY-SsHhbDJNopBuyqJz7Csp52CDQ-ZmUtLxQtdcvNDGM" alt="events" class="w-full h-36 object-cover rounded-image mb-3" />
+            <div class="text-lg font-semibold">Event Management</div>
+          </a>
         </div>
       </div>
     </section>
 
-    <!-- ABOUT -->
-    <section class="container about" aria-labelledby="about-heading">
-      <div class="copy">
-        <h3 id="about-heading" style="color:var(--accent)">Why Fab Sticks?</h3>
-        <p style="color:var(--muted)">We're a small brand focused on affordable, durable vinyl stickers with bold designs and a Gen Z edge. Waterproof, fade-resistant, made for your laptop, phone, helmet, and notebooks.</p>
-        <div style="margin-top:12px; display:flex; gap:10px; flex-wrap:wrap">
-          <div class="small-card">
-            <img src="aes2.jfif" alt="" style="height:80px; width:auto">
-            <h4>Aesthetic packs</h4>
-            <div style="color:var(--muted); font-size:13px">Curated mini-sets</div>
-          </div>
-          <div class="small-card">
-            <img src="https://i.imgur.com/MYefkPt.png" alt="" style="height:80px; width:auto">
-            <h4>Anime & Characters</h4>
-            <div style="color:var(--muted); font-size:13px">Fan-style stickers</div>
-          </div>
-          <div class="small-card">
-            <img src="https://i.imgur.com/uy7Z3PK.png" alt="" style="height:80px; width:auto">
-            <h4>Custom Orders</h4>
-            <div style="color:var(--muted); font-size:13px">Name, quotes, artwork</div>
-          </div>
-        </div>
+    <!-- Bouquets -->
+    <section id="bouquets" class="mt-8">
+      <h2 class="text-3xl font-bold mb-4">Bouquets</h2>
+      <div class="grid gap-6 product-grid">
+        <!-- Product cards will be injected by JS -->
       </div>
     </section>
 
-    <!-- SHOP -->
-    <section id="shop" class="shop container" aria-labelledby="shop-heading">
-      <h3 id="shop-heading">Shop — Popular Picks</h3>
-
-      <!-- Product grid -->
-      <div class="grid" id="productGrid">
-        <!-- Cards are built by JS for scalability; fallback in case JS disabled -->
-        <div class="card" tabindex="0">
-          <div class="imgwrap"><img src="aes.jpg" alt="Aesthetic Pack"></div>
-          <h4>Aesthetic Pack</h4>
-          <div class="meta"><span class="price">₹50</span><span style="color:var(--muted)">Sticker set</span></div>
-          <div class="actions">
-            <button class="btn ghost" onclick="openModal('Aesthetic Pack',50, 'https://i.imgur.com/3w5Hc8J.png')">Customize</button>
-            <button class="btn" onclick="quickAdd('Aesthetic Pack',50,'https://i.imgur.com/3w5Hc8J.png')">Add</button>
-          </div>
-        </div>
-
-        <div class="card" tabindex="0">
-          <div class="imgwrap"><img src="anime.jpg"Anime Pack"></div>
-          <h4>Anime Pack</h4>
-          <div class="meta"><span class="price">₹80</span><span style="color:var(--muted)">Popular</span></div>
-          <div class="actions">
-            <button class="btn ghost" onclick="openModal('Anime Pack',80, 'https://i.imgur.com/MYefkPt.png')">Customize</button>
-            <button class="btn" onclick="quickAdd('Anime Pack',80,'https://i.imgur.com/MYefkPt.png')">Add</button>
-          </div>
-        </div>
-
-        <div class="card" tabindex="0">
-          <div class="imgwrap"><img src="5.jpg" alt="Quote Pack"></div>
-          <h4>Quote Pack</h4>
-          <div class="meta"><span class="price">₹60</span><span style="color:var(--muted)">Best Seller</span></div>
-          <div class="actions">
-            <button class="btn ghost" onclick="openModal('Quote Pack',60, 'https://i.imgur.com/uy7Z3PK.png')">Customize</button>
-            <button class="btn" onclick="quickAdd('Quote Pack',60,'https://i.imgur.com/uy7Z3PK.png')">Add</button>
-          </div>
-        </div>
-
-        <div class="card" tabindex="0">
-          <div class="imgwrap"><img src="1.jpg" alt="Bike Lovers Pack"></div>
-          <h4>Bike Lovers Pack</h4>
-          <div class="meta"><span class="price">₹120</span><span style="color:var(--muted)">Helmet & decal</span></div>
-          <div class="actions">
-            <button class="btn ghost" onclick="openModal('Bike Lovers Pack',120, 'https://i.imgur.com/Fy7rW8E.png')">Customize</button>
-            <button class="btn" onclick="quickAdd('Bike Lovers Pack',120,'https://i.imgur.com/Fy7rW8E.png')">Add</button>
-          </div>
-        </div>
-
-        <!-- add more demo cards if required -->
-      </div>
+    <!-- Events (coming soon) -->
+    <section id="events" class="mt-12 card p-6">
+      <h3 class="text-2xl font-semibold">Event Management</h3>
+      <p class="mt-3">Coming soon — leave your details and we’ll reach out to plan your event.</p>
+      <form id="eventForm" class="mt-4 grid gap-3 sm:grid-cols-2">
+        <input name="name" placeholder="Your name" class="p-3 border rounded" />
+        <input name="phone" placeholder="Phone number" class="p-3 border rounded" />
+        <input name="date" placeholder="Event date" class="p-3 border rounded" />
+        <button class="bg-pink-600 text-white rounded p-3" type="submit">Request Callback via WhatsApp</button>
+      </form>
     </section>
 
-    <!-- Customization anchor (for CTA) -->
-    <section id="custom" class="container" style="padding-bottom:24px"></section>
-
-    <!-- Contact -->
-    <section id="contact" class="contact" aria-labelledby="contact-heading">
-      <h3 id="contact-heading" style="color:var(--accent)">Let's collaborate</h3>
-      <p style="color:var(--muted)">Drop a DM on Instagram or WhatsApp for bulk orders, collabs, or custom artworks.</p>
-      <div class="socials">
-        <a href="https://www.instagram.com/fab_sticks?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==" target="_blank" aria-label="Instagram">Instagram</a>
-        <a href="7893229600" aria-label="WhatsApp">WhatsApp</a>
-        <a href="mailto:fabsticks@gmail.com" aria-label="Email">Email</a>
-      </div>
-    </section>
-
+    <footer id="contact" class="mt-12 text-sm text-gray-600">
+      <p class="text-center">© Ruby Florals — Prototype. Contact: <a href="tel:+919618142330">+91 96181 42330</a></p>
+    </footer>
   </main>
 
-  <!-- Floating Cart Button -->
-  <button class="cart-fab" id="cartFab" title="Open cart" aria-label="Open cart" onclick="toggleMiniCart()">
-    🛒
-    <span class="cart-count" id="cartCount" style="display:none">0</span>
-  </button>
-
-  <!-- Mini cart -->
-  <aside class="mini-cart" id="miniCart" role="region" aria-label="Cart summary">
-    <h4>Your Cart</h4>
-    <div id="miniList"></div>
-    <div class="mini-total" id="miniTotal">
-      <div>Total</div>
-      <div id="miniTotalAmount">₹0</div>
-    </div>
-    <div style="display:flex; gap:8px; margin-top:10px">
-      <button class="btn ghost" onclick="clearCart()">Clear</button>
-      <button class="btn primary" onclick="demoCheckout()">Checkout (Demo)</button>
-    </div>
-  </aside>
-
-  <!-- Modal (customize) -->
-  <div class="modal-backdrop" id="modalBackdrop" aria-hidden="true">
-    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
-      <header>
-        <h4 id="modalTitle">Customize</h4>
-        <button class="btn ghost" onclick="closeModal()" aria-label="Close modal">✕</button>
-      </header>
-
-      <div style="margin-top:10px">
-        <div style="display:flex; gap:12px; align-items:center">
-          <img id="modalPreviewImg" src="" alt="product preview" style="width:96px; height:96px; object-fit:cover; border-radius:8px; border:1px solid var(--border)">
-          <div>
-            <div id="modalProductName" style="font-weight:800"></div>
-            <div style="color:var(--muted); font-size:13px" id="modalBasePrice"></div>
-          </div>
-        </div>
-
-        <div class="field">
-          <label for="sizeSelect">Size</label>
-          <div class="size-options" id="sizeOptions">
-            <button class="size-btn active" data-size="small">Small (+₹0)</button>
-            <button class="size-btn" data-size="medium">Medium (+₹30)</button>
-            <button class="size-btn" data-size="large">Large (+₹70)</button>
-          </div>
-        </div>
-
-        <div class="field">
-          <label for="qtyInput">Quantity</label>
-          <input id="qtyInput" type="number" min="1" value="1" />
-        </div>
-
-        <div class="field">
-          <label for="customCheckbox"><input type="checkbox" id="customCheckbox" />  Custom Upload (+₹50)</label>
-          <input id="fileInput" type="file" accept="image/*" disabled />
-          <img id="uploadPreview" class="upload-preview" alt="upload preview">
-        </div>
-
-        <div class="price-line">
-          <div>Estimated</div>
-          <div id="modalPrice">₹0</div>
-        </div>
-
-        <div style="display:flex; gap:10px; margin-top:12px">
-          <button class="btn primary" onclick="addModalToCart()">Add to Cart</button>
-          <button class="btn ghost" onclick="closeModal()">Cancel</button>
-        </div>
+  <!-- Product modal -->
+  <div id="productModal" class="fixed inset-0 bg-black bg-opacity-40 hidden items-center justify-center z-50">
+    <div class="bg-white rounded-lg max-w-xl w-full p-4">
+      <button id="closeModal" class="float-right">✕</button>
+      <div id="modalContent" class="grid gap-4 sm:grid-cols-2 items-start">
+        <!-- Content injected by JS -->
       </div>
     </div>
   </div>
 
-  <!-- Footer -->
-  <footer>
-    © 2025 Fab Sticks — Stick Your Vibe · Made with ♥
-  </footer>
+  <!-- Sticky mobile WhatsApp CTA -->
+  <div id="stickyWhatsApp" class="fixed bottom-4 left-1/2 transform -translate-x-1/2 z-40 w-11/12 max-w-md">
+    <button id="stickyOrderBtn" class="w-full bg-pink-600 text-white p-3 rounded-full font-semibold flex items-center justify-center gap-3">📱 Order via WhatsApp</button>
+  </div>
 
-  <!-- =========================
-       JavaScript (behavior)
-       ========================= -->
   <script>
-    /********* Data & Pricing rules *********/
-    const SIZE_MOD = { small: 0, medium: 30, large: 70 }; // rupee modifier by size
-    const CUSTOM_FEE = 50; // extra for custom upload
+    const WHATSAPP_NUMBER = '919618142330'; // India +91
 
-    // Cart structure: {id, name, img, basePrice, size, qty, custom, subtotal}
-    let cart = [];
+    const products = [
+      { id: 'RF001', name: 'Sunshine Roses', price: 999, short: 'Mixed bouquet', img: 'https://encrypted-tbn2.gstatic.com/licensed-image?q=tbn:ANd9GcS4k-kyeLvJbtAI1Maafuhjo-BnsfqXuYtBNmXFPliSYQWxuH66aKaeaaeRgJK4dKpNYKUzcBeWYX9aSRV_XIt0tLEkM6BM-9mMsYCeEyVfnZSYPD4' },
+      { id: 'RF002', name: 'Blushing Beauty', price: 1299, short: 'Pink arrangement', img: 'https://encrypted-tbn2.gstatic.com/licensed-image?q=tbn:ANd9GcRyeAoByFY00N30jW9CX1TFzjSelEYORxCbBOAjs9srxvVe8h2tzg14D2kf9lLejvDCZqLQSr8RiUPC1bfZeFY6eSta8QUzLvCeJk6iMTzZu3kXO2Y' },
+      { id: 'RF003', name: 'White Elegance', price: 1199, short: 'Classic bouquet', img: 'https://encrypted-tbn0.gstatic.com/licensed-image?q=tbn:ANd9GcQzH3pdwUHbQLCEY2ipBZ9_1EPLFz4nnSOvRdiT8M4i6k6dw5UfBqKjMsgL6y2-tSUeyY_5nxFBq-NJWKnCM_dq1qQ5SVtm_Sgu9FoTRVh4dKL80rA' },
+      { id: 'RF004', name: 'Vibrant Blooms', price: 1399, short: 'Colorful bouquet', img: 'https://encrypted-tbn0.gstatic.com/licensed-image?q=tbn:ANd9GcR8W3fi28Zlv1cROOMefAj0pPQbGAV0tCJ2u_pne1pASFDWaCFSakdQFFdjxVCRuZQWFSaPdQ7AggxiJEcPQMzirStrdC1g-LoeEmXZaipxiWOhu5U' }
+    ];
 
-    // Elements
-    const cartFab = document.getElementById('cartFab');
-    const cartCount = document.getElementById('cartCount');
-    const miniCart = document.getElementById('miniCart');
-    const miniList = document.getElementById('miniList');
-    const miniTotalAmount = document.getElementById('miniTotalAmount');
+    function urlEncode(t){ return encodeURIComponent(t); }
 
-    const modalBackdrop = document.getElementById('modalBackdrop');
-    const modalTitle = document.getElementById('modalTitle');
-    const modalProductName = document.getElementById('modalProductName');
-    const modalBasePrice = document.getElementById('modalBasePrice');
-    const modalPreviewImg = document.getElementById('modalPreviewImg');
-
-    const sizeOptions = document.getElementById('sizeOptions');
-    const qtyInput = document.getElementById('qtyInput');
-    const customCheckbox = document.getElementById('customCheckbox');
-    const fileInput = document.getElementById('fileInput');
-    const uploadPreview = document.getElementById('uploadPreview');
-    const modalPrice = document.getElementById('modalPrice');
-
-    let openItem = null; // currently customizing item object {name, basePrice, img}
-
-    /********* Utility helpers *********/
-    function formatRupee(n){
-      // Ensure integer rupee value is shown (no floating issues)
-      // compute digit-by-digit safe: use rounding to 2 decimals then drop decimals since rupees are integer
-      const value = Math.round(Number(n));
-      return `₹${value}`;
+    function buildWaLink(message){
+      return `https://wa.me/${WHATSAPP_NUMBER}?text=${urlEncode(message)}`;
     }
 
-    function showCartCount(){
-      const totalQty = cart.reduce((s,i)=>s+i.qty,0);
-      if(totalQty > 0){
-        cartCount.style.display = 'flex';
-        cartCount.textContent = totalQty;
-      } else {
-        cartCount.style.display = 'none';
-      }
-    }
-
-    function computeSubtotal(basePrice, size, qty, custom){
-      // All arithmetic done carefully:
-      let total = Number(basePrice);
-      total += Number(SIZE_MOD[size] || 0);
-      if(custom) total += Number(CUSTOM_FEE);
-      total = total * Number(qty);
-      // return integer rupee
-      return Math.round(total);
-    }
-
-    /********* Mini cart rendering *********/
-    function renderMiniCart(){
-      miniList.innerHTML = '';
-      if(cart.length === 0){
-        miniList.innerHTML = '<div style="color:var(--muted); padding:14px">Your cart is empty. Add a sticker!</div>';
-        miniTotalAmount.textContent = formatRupee(0);
-        showCartCount();
-        return;
-      }
-
-      cart.forEach((item, idx) => {
-        const node = document.createElement('div');
-        node.className = 'mini-item';
-        node.innerHTML = `
-          <img src="${item.img}" alt="${item.name}">
-          <div class="r">
-            <p style="font-weight:800">${escapeHtml(item.name)}</p>
-            <div style="font-size:13px; color:var(--muted)">${escapeHtml(item.size)} • x${item.qty} ${item.custom? '• Custom': ''}</div>
-          </div>
-          <div style="text-align:right">
-            <div style="font-weight:900; color:var(--accent)">${formatRupee(item.subtotal)}</div>
-            <div style="margin-top:6px; display:flex; gap:6px; justify-content:flex-end">
-              <button class="btn ghost" onclick="changeQty(${idx}, -1)">-</button>
-              <button class="btn ghost" onclick="changeQty(${idx}, +1)">+</button>
-              <button class="btn ghost" onclick="removeItem(${idx})">Remove</button>
+    function createProductCard(p){
+      const div = document.createElement('div');
+      div.className = 'card bg-white overflow-hidden';
+      div.innerHTML = `
+        <img src="${p.img}" alt="${p.name}" class="w-full h-44 object-cover rounded-image" />
+        <div class="p-4">
+          <h4 class="font-semibold text-lg">${p.name}</h4>
+          <p class="text-sm text-gray-600">${p.short}</p>
+          <div class="mt-3 flex items-center justify-between">
+            <div class="text-xl font-bold">₹${p.price}</div>
+            <div class="flex items-center space-x-2">
+              <button class="orderBtn bg-pink-600 text-white px-3 py-2 rounded">Order Now</button>
+              <button class="detailsBtn border px-3 py-2 rounded">Details</button>
             </div>
           </div>
-        `;
-        miniList.appendChild(node);
+        </div>
+      `;
+
+      // Order button behaviour
+      div.querySelector('.orderBtn').addEventListener('click', ()=>{
+        const message = `Hi Ruby Florals — I want to order the product: "${p.name}" (ID: ${p.id}). Price: ₹${p.price}. Delivery on: [date]. Address: [address]. Name: [your name], Phone: [your phone].`;
+        window.open(buildWaLink(message), '_blank');
       });
 
-      const total = cart.reduce((s,i)=>s+i.subtotal,0);
-      miniTotalAmount.textContent = formatRupee(total);
-      showCartCount();
+      // Details button behaviour (open modal)
+      div.querySelector('.detailsBtn').addEventListener('click', ()=> openModal(p));
+
+      return div;
     }
 
-    function toggleMiniCart(){
-      if(miniCart.style.display === 'block'){
-        miniCart.style.display = 'none';
-      } else {
-        miniCart.style.display = 'block';
-        renderMiniCart();
-      }
-    }
+    function openModal(p){
+      const modal = document.getElementById('productModal');
+      const content = document.getElementById('modalContent');
+      content.innerHTML = `
+        <div>
+          <img src="${p.img}" alt="${p.name}" class="w-full h-60 object-cover rounded" />
+        </div>
+        <div>
+          <h3 class="text-2xl font-bold">${p.name}</h3>
+          <p class="text-gray-600 mt-2">${p.short}</p>
+          <p class="mt-3 font-bold">Price: ₹${p.price}</p>
+          <div class="mt-4 flex gap-3">
+            <button id="modalOrder" class="bg-pink-600 text-white px-4 py-2 rounded">Order via WhatsApp</button>
+            <button id="modalClose" class="px-4 py-2 border rounded">Close</button>
+          </div>
+        </div>
+      `;
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
 
-    function clearCart(){
-      cart = [];
-      renderMiniCart();
-      toggleMiniCart(); // close
-    }
-
-    function demoCheckout(){
-      if(cart.length === 0){ alert('Cart is empty. Add something first!'); return; }
-      alert('Checkout is a demo. Cart total: ' + miniTotalAmount.textContent + '\n\n(Implement backend to process orders.)');
-      // For demo, clear cart
-      cart = [];
-      renderMiniCart();
-      toggleMiniCart();
-    }
-
-    function changeQty(index, delta){
-      if(!cart[index]) return;
-      cart[index].qty = Math.max(1, cart[index].qty + delta);
-      cart[index].subtotal = computeSubtotal(cart[index].basePrice, cart[index].size, cart[index].qty, cart[index].custom);
-      renderMiniCart();
-    }
-
-    function removeItem(index){
-      cart.splice(index,1);
-      renderMiniCart();
-    }
-
-    /********* Quick-add (adds default small qty=1 non-custom) *********/
-    function quickAdd(name, basePrice, img){
-      const size = 'small';
-      const qty = 1;
-      const custom = false;
-      const subtotal = computeSubtotal(basePrice, size, qty, custom);
-      cart.push({
-        id: Date.now() + Math.random(),
-        name, img, basePrice, size, qty, custom, subtotal
+      document.getElementById('modalOrder').addEventListener('click', ()=>{
+        const message = `Hi Ruby Florals — I want to order the product: "${p.name}" (ID: ${p.id}). Price: ₹${p.price}. Delivery on: [date]. Address: [address]. Name: [your name], Phone: [your phone].`;
+        window.open(buildWaLink(message), '_blank');
       });
-      // small visual feedback
-      renderMiniCart();
-      miniCart.style.display = 'block';
-      setTimeout(()=>miniCart.style.opacity = 1, 10);
-    }
-
-    /********* Modal behavior *********/
-    function openModal(name, basePrice, img){
-      openItem = { name, basePrice, img };
-      modalProductName.textContent = name;
-      modalBasePrice.textContent = `Base: ${formatRupee(basePrice)}`;
-      modalPreviewImg.src = img || '';
-      modalBackdrop.style.display = 'flex';
-      modalBackdrop.setAttribute('aria-hidden','false');
-
-      // reset modal controls
-      // Reset size buttons
-      Array.from(sizeOptions.children).forEach(b => b.classList.remove('active'));
-      sizeOptions.querySelector('[data-size="small"]').classList.add('active');
-      qtyInput.value = 1;
-      customCheckbox.checked = false;
-      fileInput.value = '';
-      fileInput.disabled = true;
-      uploadPreview.style.display = 'none';
-
-      // initial price calc
-      updateModalPrice();
-    }
-
-    function openModalFromCTA(){
-      // If user clicks "Customize Your Sticker" from hero -> open a default blank item for custom design
-      openModal('Custom Sticker', 70, 'https://i.imgur.com/3w5Hc8J.png');
+      document.getElementById('modalClose').addEventListener('click', closeModal);
     }
 
     function closeModal(){
-      modalBackdrop.style.display = 'none';
-      modalBackdrop.setAttribute('aria-hidden','true');
-      openItem = null;
+      const modal = document.getElementById('productModal');
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
     }
 
-    // Size buttons
-    sizeOptions.addEventListener('click', (e)=>{
-      const btn = e.target.closest('.size-btn');
-      if(!btn) return;
-      Array.from(sizeOptions.children).forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-      updateModalPrice();
+    // Render products
+    const grid = document.querySelector('.product-grid');
+    products.forEach(p=> grid.appendChild(createProductCard(p)));
+
+    // Modal close
+    document.getElementById('closeModal').addEventListener('click', closeModal);
+
+    // Sticky WhatsApp CTA behaviour
+    document.getElementById('stickyOrderBtn').addEventListener('click', ()=>{
+      const message = `Hi Ruby Florals — I want to enquire about products and orders. Please contact me. Name: [your name], Phone: [your phone].`;
+      window.open(buildWaLink(message), '_blank');
     });
 
-    qtyInput.addEventListener('input', updateModalPrice);
+    // Event form -> whatsapp
+    document.getElementById('eventForm').addEventListener('submit', (e)=>{
+      e.preventDefault();
+      const f = new FormData(e.target);
+      const message = `Hi Ruby Florals — Event enquiry. Name: ${f.get('name')}. Phone: ${f.get('phone')}. Event date: ${f.get('date')}. Please contact.`;
+      window.open(buildWaLink(message), '_blank');
+    });
 
-    customCheckbox.addEventListener('change', (e)=>{
-      fileInput.disabled = !e.target.checked;
-      if(!e.target.checked){
-        fileInput.value = '';
-        uploadPreview.style.display = 'none';
+    // Top whatsapp button
+    document.getElementById('whatsappTop').addEventListener('click', ()=>{
+      const message = `Hi Ruby Florals — I want to enquire about products.`;
+      window.open(buildWaLink(message), '_blank');
+    });
+
+    // Simple mobile behaviour: hide top WA and show sticky on small screens
+    function adjustVisibility(){
+      if(window.innerWidth < 768){
+        document.getElementById('whatsappTop').classList.add('hidden');
+        document.getElementById('stickyWhatsApp').style.display = 'block';
+      } else {
+        document.getElementById('whatsappTop').classList.remove('hidden');
+        document.getElementById('stickyWhatsApp').style.display = 'none';
       }
-      updateModalPrice();
-    });
-
-    fileInput.addEventListener('change', function(e){
-      const f = e.target.files && e.target.files[0];
-      if(!f) { uploadPreview.style.display='none'; return; }
-      const url = URL.createObjectURL(f);
-      uploadPreview.src = url;
-      uploadPreview.style.display = 'block';
-    });
-
-    function updateModalPrice(){
-      if(!openItem) return;
-      const sizeBtn = sizeOptions.querySelector('.size-btn.active');
-      const size = sizeBtn ? sizeBtn.getAttribute('data-size') : 'small';
-      const qty = Math.max(1, Number(qtyInput.value) || 1);
-      const custom = customCheckbox.checked;
-      const subtotal = computeSubtotal(openItem.basePrice, size, qty, custom);
-      modalPrice.textContent = formatRupee(subtotal);
     }
-
-    // When user adds from modal
-    function addModalToCart(){
-      if(!openItem) return;
-      const sizeBtn = sizeOptions.querySelector('.size-btn.active');
-      const size = sizeBtn ? sizeBtn.getAttribute('data-size') : 'small';
-      const qty = Math.max(1, Number(qtyInput.value) || 1);
-      const custom = customCheckbox.checked;
-      const subtotal = computeSubtotal(openItem.basePrice, size, qty, custom);
-      let img = openItem.img || '';
-      // if user uploaded custom image, prefer preview (shows client-side preview only)
-      if(custom && fileInput.files && fileInput.files[0]){
-        img = URL.createObjectURL(fileInput.files[0]);
-      }
-
-      cart.push({
-        id: Date.now() + Math.random(),
-        name: openItem.name,
-        img,
-        basePrice: Number(openItem.basePrice),
-        size,
-        qty,
-        custom,
-        subtotal
-      });
-
-      // update UI
-      renderMiniCart();
-      closeModal();
-      miniCart.style.display = 'block';
-    }
-
-    // Safe escape for small text injection
-    function escapeHtml(text){
-      return String(text)
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;");
-    }
-
-    /********* Init *********/
-    document.addEventListener('DOMContentLoaded', () => {
-      renderMiniCart();
-      // close modal on backdrop click
-      modalBackdrop.addEventListener('click', (ev) => {
-        if(ev.target === modalBackdrop) closeModal();
-      });
-
-      // close mini cart when clicking outside
-      document.addEventListener('click', (ev) => {
-        if(!miniCart.contains(ev.target) && !cartFab.contains(ev.target)){
-          miniCart.style.display = 'none';
-        }
-      });
-
-      // keyboard: Esc to close modal or mini cart
-      document.addEventListener('keydown', (e) => {
-        if(e.key === 'Escape'){
-          closeModal();
-          miniCart.style.display = 'none';
-        }
-      });
-    });
-
-    // Expose some functions for inline buttons
-    window.openModal = openModal;
-    window.quickAdd = quickAdd;
-    window.toggleMiniCart = toggleMiniCart;
-    window.clearCart = clearCart;
-    window.demoCheckout = demoCheckout;
-    window.changeQty = changeQty;
-    window.removeItem = removeItem;
-    window.openModalFromCTA = openModalFromCTA;
+    adjustVisibility();
+    window.addEventListener('resize', adjustVisibility);
   </script>
 </body>
 </html>
